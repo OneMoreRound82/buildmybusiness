@@ -42,7 +42,7 @@ export const store = new Vuex.Store({
 		}
 
 	},
-
+//Hello
 	getters: {
 
 		loggedIn(state){
@@ -69,7 +69,7 @@ export const store = new Vuex.Store({
 
 				})
 				.catch(error => {
-				
+
 					reject(error);
 				})
 			})

@@ -1,22 +1,30 @@
 import Home from './components/Home.vue';
-import Dashboard from './components/Dashboard.vue';
+import User from './components/User.vue';
 import Register from './components/auth/Register.vue';
 import Login from './components/auth/Login.vue';
 import Logout from './components/auth/Logout.vue';
+import Tasks from './components/Tasks.vue';
 
 const routes = [
     {
-      path: '/',
+      path: '/home',
       name: 'home',
       component: Home
     },
     {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: Dashboard,
+      path: '/user',
+      name: 'user',
+      component: User,
       meta: {
         requiresAuth: true,
-      }
+      },
+      children: [
+          {
+            path: 'tasks',
+            name: 'tasks',
+            component: Tasks,
+          }
+        ]
     },
     {
       path: '/register',

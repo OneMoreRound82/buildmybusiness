@@ -3,7 +3,8 @@ import User from './components/User.vue';
 import Register from './components/auth/Register.vue';
 import Login from './components/auth/Login.vue';
 import Logout from './components/auth/Logout.vue';
-import Tasks from './components/Tasks.vue';
+import Actions from './components/Actions.vue';
+// import ModulesSidebar from './components/ModulesSidebar.vue';
 
 const routes = [
     {
@@ -18,11 +19,12 @@ const routes = [
       meta: {
         requiresAuth: true,
       },
+      
       children: [
           {
-            path: 'tasks',
-            name: 'tasks',
-            component: Tasks,
+            path: 'actions',
+            name: 'actions',
+            component: Actions,
           }
         ]
     },

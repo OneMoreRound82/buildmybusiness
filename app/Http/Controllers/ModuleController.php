@@ -14,7 +14,7 @@ class ModuleController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Module::all()->toArray());
     }
 
     /**

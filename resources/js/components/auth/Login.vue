@@ -43,7 +43,7 @@ export default {
         password: this.password,
       })
         .then(response => {
-          this.$router.push({ name: 'tasks' })
+          this.$router.push({ name: 'actions' })
         })
 
     }

@@ -100,7 +100,7 @@ export const store = new Vuex.Store({
 
 		  loadModules(context) {
 
-			    return axios.get('api/modules').then(response => {
+			    return axios.get('/modules').then(response => {
 			        context.commit("SET_MODULES", response.data);
      	    	});
 			},
@@ -118,9 +118,9 @@ export const store = new Vuex.Store({
 
 			loadActions(context){
 
-				axios.get(`api/users/6/responses`).then(response => {
-			        console.log(response.data);
-			    });
+				// axios.get(`api/users/6/responses`).then(response => {
+			  //       console.log(response.data);
+			  //   });
 				// return axios.get(`api/tasks/${context.state.currentTask}/actions/responses`).then(response => {
 			 //        context.commit("SET_ACTIONS", response.data);
 

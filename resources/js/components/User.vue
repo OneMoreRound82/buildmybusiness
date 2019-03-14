@@ -1,18 +1,40 @@
 // User.vue
 
 <template>
+
   <div>
     <header>
       <h1>{{ title }}</h1>
     </header>
-    <router-view></router-view>
+    <div class="row">
+      <div class="col-sm-2 col-with-right-border">
+          <modules-sidebar></modules-sidebar>
+      </div>
+    <div class="row">
+          <div class="col">
+            <tasks></tasks>
+          </div>
+
+          <div class="col">
+            <router-view></router-view>
+          </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
-
+//
+import ModulesSidebar from './ModulesSidebar.vue';
+import Tasks from './Tasks.vue';
 
 export default {
+
+  components:{
+    'modules-sidebar': ModulesSidebar,
+    'tasks': Tasks,
+  },
 
   data(){
     return {
@@ -24,15 +46,3 @@ export default {
 }
 
 </script>
-
-<stlye scoped>
-  .header {
-    background: lightgreen;
-    padding: 10px;
-  }
-
-  .h1{
-    color: #222;
-    text-align: center;
-  }
-</style>

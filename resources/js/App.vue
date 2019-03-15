@@ -16,17 +16,17 @@
 
 
         <b-nav-item right>
-          <li><router-link to='/'>Home</router-link></li>
+          <li v-if="loggedIn"><router-link to='/dashboard'>Dashboard</router-link></li>
           <li v-if="!loggedIn"><router-link to='/register'>Register</router-link></li>
           <li v-if="!loggedIn"><router-link to='/login'>Login</router-link></li>
             <li v-if="loggedIn"><router-link to='/logout'>Logout</router-link></li>
         </b-nav-item>
 
-        <b-nav-item-dropdown right>
+        <!-- <b-nav-item-dropdown right> -->
           <!-- Using button-content slot -->
-          <template slot="button-content"><em>User</em></template>
+          <!-- <template slot="button-content"><em>User</em></template>
           <b-dropdown-item href="#">Signout</b-dropdown-item>
-        </b-nav-item-dropdown>
+        </b-nav-item-dropdown> -->
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>

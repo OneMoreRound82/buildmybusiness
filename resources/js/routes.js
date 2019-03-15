@@ -1,32 +1,37 @@
 import Home from './components/Home.vue';
-import User from './components/User.vue';
+import Project from './components/Project.vue';
 import Register from './components/auth/Register.vue';
 import Login from './components/auth/Login.vue';
 import Logout from './components/auth/Logout.vue';
 import Actions from './components/Actions.vue';
-// import ModulesSidebar from './components/ModulesSidebar.vue';
+import Dashboard from './components/Dashboard.vue';
 
 const routes = [
     {
-      path: '/home',
+      path: '/',
       name: 'home',
       component: Home
     },
     {
-      path: '/user',
-      name: 'user',
-      component: User,
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard,
+    },
+    {
+      path: '/project',
+      name: 'project',
+      component: Project,
       meta: {
         requiresAuth: true,
       },
-      
-      children: [
-          {
-            path: 'actions',
-            name: 'actions',
-            component: Actions,
-          }
-        ]
+
+            children: [
+                {
+                  path: 'actions',
+                  name: 'actions',
+                  component: Actions,
+                },
+              ]
     },
     {
       path: '/register',

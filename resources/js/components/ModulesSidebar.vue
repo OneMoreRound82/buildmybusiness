@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2>Modules:</h2>
     <ul class="Modules-Sidebar">
       <li v-for="module in this.$store.state.modules" :class="{ 'is-active' : selectedModule === module.id }">
 		    	<a href="#"  @click="selectModule(module.id)">{{ module.module }}</a></li>

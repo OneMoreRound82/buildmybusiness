@@ -1,4 +1,4 @@
-// User.vue
+// Project.vue
 
 <template>
 
@@ -38,7 +38,7 @@ export default {
 
   data(){
     return {
-      title: 'UserOne'
+      title: 'Your Project'
     }
   },
 

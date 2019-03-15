@@ -17,6 +17,8 @@ export const store = new Vuex.Store({
 		modules:[],
 		tasks:[],
 		actions:[],
+		userId: localStorage.getItem('loggedin_user') || null,
+		userName: localStorage.getItem('loggedin_username') || null,
 	},
 
 
@@ -39,6 +41,19 @@ export const store = new Vuex.Store({
 		},
 		DESTROY_TOKEN: (state) => {
 			state.token = null;
+		},
+		SET_USERID: (state, userid) => {
+			state.userId = userid;
+		},
+		DESTROY_USERID: (state, userid) => {
+			state.userId = null;
+		},
+
+		SET_USERNAME: (state, username) => {
+			state.userName = username;
+		},
+		DESTROY_USERNAME: (state, username) => {
+			state.userName = null;
 		}
 
 	},
@@ -55,6 +70,23 @@ export const store = new Vuex.Store({
 
 
 	actions: {
+
+		getUserDetails(context) {
+
+				axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token;
+				return axios.get('/user').then(response => {
+					console.log(response.data)
+
+					const userid = response.data.id
+						context.commit("SET_USERID", userid);
+						localStorage.setItem('loggedin_user', userid)
+
+					const username = response.data.name
+						context.commit("SET_USERNAME", username);
+						localStorage.setItem('loggedin_username', username)
+
+					});
+		},
 
 		register(context, data) {
 			return new Promise ((resolve, reject) => {
@@ -85,6 +117,8 @@ export const store = new Vuex.Store({
 
 						localStorage.removeItem('access_token')
 						context.commit("DESTROY_TOKEN")
+						context.commit("DESTROY_USERID")
+						context.commit("DESTROY_USERNAME")
 						resolve(response)
 						// console.log(response);
 					})

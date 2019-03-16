@@ -11,7 +11,7 @@
     <li><router-link to='/project/actions'>View Project</router-link></li>
 
     <ul>
-      <li v-for="project in projects"> {{ project.projectName }} </li>
+      <li v-for="(project, id) in projects" :key="id"> {{ project }} </li>
     </ul>
   </div>
 </div>
@@ -22,8 +22,11 @@ import { mapState } from "vuex";
 
 export default {
 
-  
-  computed: mapState({ name: "userName" }),
+
+  computed: mapState({
+    name: "userName",
+    projects: "projects"
+  }),
 
   created() {
 

@@ -1877,7 +1877,8 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])({
-    name: "userName"
+    name: "userName",
+    projects: "projects"
   }),
   created: function created() {
     // this.name = this.$store.state.userName;
@@ -58837,8 +58838,8 @@ var render = function() {
       _vm._v(" "),
       _c(
         "ul",
-        _vm._l(_vm.projects, function(project) {
-          return _c("li", [_vm._v(" " + _vm._s(project.projectName) + " ")])
+        _vm._l(_vm.projects, function(project, id) {
+          return _c("li", { key: id }, [_vm._v(" " + _vm._s(project) + " ")])
         }),
         0
       )

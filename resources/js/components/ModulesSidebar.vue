@@ -43,9 +43,9 @@ export default {
 		}
 	},
 
-   mounted() {
+   created() {
 
-      // console.log(this.selectedModule);
+        console.log('call one');
         this.$store
 		    .dispatch("loadModules")
 

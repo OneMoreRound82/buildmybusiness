@@ -9,6 +9,10 @@
     <div>
     <p>To view your projects, choose one from the list below</p>
     <li><router-link to='/project/actions'>View Project</router-link></li>
+
+    <ul>
+      <li v-for="project in projects"> {{ project.projectName }} </li>
+    </ul>
   </div>
 </div>
 </template>
@@ -17,15 +21,21 @@ export default {
 
   data(){
     return {
-      name: this.$store.state.userName
+      name: '',
+      projects: [
+        {
+          projectName: this.$store.state.projects
+        } ,
+      ]
     }
   },
 
-  mounted() {
+  created() {
 
+       this.name = this.$store.state.userName;
 
        this.$store
-       .dispatch("getUserDetails");
+       .dispatch("fetchProjects")
 
   },
 }

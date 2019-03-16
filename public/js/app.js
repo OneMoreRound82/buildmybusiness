@@ -1869,14 +1869,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      name: this.$store.state.userName
+      name: '',
+      projects: [{
+        projectName: this.$store.state.projects
+      }]
     };
   },
-  mounted: function mounted() {
-    this.$store.dispatch("getUserDetails");
+  created: function created() {
+    this.name = this.$store.state.userName;
+    this.$store.dispatch("fetchProjects");
   }
 });
 
@@ -1942,8 +1950,8 @@ __webpack_require__.r(__webpack_exports__);
       // CAN I EDIT THE ABOVE CODE SO THE API CALL IS IN THE STORE??
     }
   },
-  mounted: function mounted() {
-    // console.log(this.selectedModule);
+  created: function created() {
+    console.log('call one');
     this.$store.dispatch("loadModules");
   }
 });
@@ -2080,6 +2088,8 @@ __webpack_require__.r(__webpack_exports__);
         username: this.username,
         password: this.password
       }).then(function (response) {
+        _this.$store.dispatch("getUserDetails");
+
         _this.$router.push({
           name: 'dashboard'
         });
@@ -58826,6 +58836,14 @@ var render = function() {
           ])
         ],
         1
+      ),
+      _vm._v(" "),
+      _c(
+        "ul",
+        _vm._l(_vm.projects, function(project) {
+          return _c("li", [_vm._v(" " + _vm._s(project.projectName) + " ")])
+        }),
+        0
       )
     ])
   ])
@@ -75956,7 +75974,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     tasks: [],
     actions: [],
     userId: localStorage.getItem('loggedin_user') || null,
-    userName: localStorage.getItem('loggedin_username') || null
+    userName: localStorage.getItem('loggedin_username') || null,
+    projects: []
   },
   mutations: {
     SET_MODULES: function SET_MODULES(state, payload) {
@@ -75977,14 +75996,20 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     SET_USERID: function SET_USERID(state, userid) {
       state.userId = userid;
     },
-    DESTROY_USERID: function DESTROY_USERID(state, userid) {
+    DESTROY_USERID: function DESTROY_USERID(state) {
       state.userId = null;
     },
     SET_USERNAME: function SET_USERNAME(state, username) {
       state.userName = username;
     },
-    DESTROY_USERNAME: function DESTROY_USERNAME(state, username) {
-      state.userName = null;
+    DESTROY_USERNAME: function DESTROY_USERNAME(state) {
+      state.userName = '';
+    },
+    SET_PROJECTS: function SET_PROJECTS(state, projects) {
+      state.projects = projects; //	console.log(state.projects);
+    },
+    DESTROY_PROJECTS: function DESTROY_PROJECTS(state) {
+      state.projects = [];
     }
   },
   //Hello
@@ -75997,16 +76022,33 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     }
   },
   actions: {
+    fetchProjects: function fetchProjects(context) {
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token;
+      return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/project').then(function (response) {
+        //	 let projects = objArray.map(projects = > response.data.project_name]
+        var projectNames = response.data.map(function (project) {
+          return project.project_name;
+        }); // console.log (projectNames)
+
+        context.commit("SET_PROJECTS", projectNames); // const userid = response.data.id
+        // 	localStorage.setItem('loggedin_user', userid)
+        // 	context.commit("SET_USERID", userid);
+        //
+        // const username = response.data.name
+        // 	localStorage.setItem('loggedin_username', username)
+        // 	context.commit("SET_USERNAME", username);
+      });
+    },
     getUserDetails: function getUserDetails(context) {
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token;
       return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/user').then(function (response) {
-        console.log(response.data);
+        //	console.log(response.data)
         var userid = response.data.id;
-        context.commit("SET_USERID", userid);
         localStorage.setItem('loggedin_user', userid);
+        context.commit("SET_USERID", userid);
         var username = response.data.name;
-        context.commit("SET_USERNAME", username);
         localStorage.setItem('loggedin_username', username);
+        context.commit("SET_USERNAME", username);
       });
     },
     register: function register(context, data) {
@@ -76032,16 +76074,20 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
             context.commit("DESTROY_TOKEN");
             context.commit("DESTROY_USERID");
             context.commit("DESTROY_USERNAME");
+            context.commit("DESTROY_PROJECTS");
             resolve(response); // console.log(response);
           }).catch(function (error) {
             localStorage.removeItem('access_token');
             context.commit("DESTROY_TOKEN");
+            context.commit("DESTROY_USERID");
+            context.commit("DESTROY_USERNAME");
             reject(error);
           });
         });
       }
     },
     loadModules: function loadModules(context) {
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token;
       return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/modules').then(function (response) {
         context.commit("SET_MODULES", response.data);
       });

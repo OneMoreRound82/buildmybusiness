@@ -19,6 +19,7 @@ export const store = new Vuex.Store({
 		actions:[],
 		userId: localStorage.getItem('loggedin_user') || null,
 		userName: localStorage.getItem('loggedin_username') || null,
+		projects:[],
 	},
 
 
@@ -45,16 +46,24 @@ export const store = new Vuex.Store({
 		SET_USERID: (state, userid) => {
 			state.userId = userid;
 		},
-		DESTROY_USERID: (state, userid) => {
+		DESTROY_USERID: (state) => {
 			state.userId = null;
 		},
 
 		SET_USERNAME: (state, username) => {
 			state.userName = username;
 		},
-		DESTROY_USERNAME: (state, username) => {
-			state.userName = null;
-		}
+		DESTROY_USERNAME: (state) => {
+			state.userName = '';
+		},
+
+		SET_PROJECTS: (state, projects) => {
+			state.projects = projects;
+		//	console.log(state.projects);
+		},
+		DESTROY_PROJECTS: (state) => {
+			state.projects = [];
+		},
 
 	},
 //Hello
@@ -71,20 +80,39 @@ export const store = new Vuex.Store({
 
 	actions: {
 
+		fetchProjects(context) {
+
+				axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token;
+				return axios.get('/project').then(response => {
+			//	 let projects = objArray.map(projects = > response.data.project_name]
+				const projectNames = response.data.map(project => project.project_name);
+				// console.log (projectNames)
+				 context.commit("SET_PROJECTS", projectNames);
+
+
+					// const userid = response.data.id
+					// 	localStorage.setItem('loggedin_user', userid)
+					// 	context.commit("SET_USERID", userid);
+					//
+					// const username = response.data.name
+					// 	localStorage.setItem('loggedin_username', username)
+					// 	context.commit("SET_USERNAME", username);
+					});
+		},
+
 		getUserDetails(context) {
 
 				axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token;
 				return axios.get('/user').then(response => {
-					console.log(response.data)
+				//	console.log(response.data)
 
 					const userid = response.data.id
-						context.commit("SET_USERID", userid);
 						localStorage.setItem('loggedin_user', userid)
+						context.commit("SET_USERID", userid);
 
 					const username = response.data.name
-						context.commit("SET_USERNAME", username);
 						localStorage.setItem('loggedin_username', username)
-
+						context.commit("SET_USERNAME", username);
 					});
 		},
 
@@ -119,12 +147,15 @@ export const store = new Vuex.Store({
 						context.commit("DESTROY_TOKEN")
 						context.commit("DESTROY_USERID")
 						context.commit("DESTROY_USERNAME")
+						context.commit("DESTROY_PROJECTS")
 						resolve(response)
 						// console.log(response);
 					})
 					.catch(error => {
 						localStorage.removeItem('access_token')
 						context.commit("DESTROY_TOKEN")
+						context.commit("DESTROY_USERID")
+						context.commit("DESTROY_USERNAME")
 						reject(error);
 					})
 				})
@@ -132,9 +163,11 @@ export const store = new Vuex.Store({
 			}
 		},
 
-		  loadModules(context) {
+		 loadModules(context) {
 
+					axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 			    return axios.get('/modules').then(response => {
+
 			        context.commit("SET_MODULES", response.data);
      	    	});
 			},

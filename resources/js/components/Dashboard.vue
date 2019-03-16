@@ -17,22 +17,27 @@
 </div>
 </template>
 <script>
+
+import { mapState } from "vuex";
+
 export default {
 
-  data(){
-    return {
-      name: '',
-      projects: [
-        {
-          projectName: this.$store.state.projects
-        } ,
-      ]
-    }
-  },
+  // data(){
+  //   return {
+  //     name: '',
+  //     projects: [
+  //       {
+  //         projectName: this.$store.state.projects
+  //       } ,
+  //     ]
+  //   }
+  // },
+
+  computed: mapState({ name: "userName" }),
 
   created() {
 
-       this.name = this.$store.state.userName;
+      // this.name = this.$store.state.userName;
 
        this.$store
        .dispatch("fetchProjects")

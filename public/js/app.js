@@ -1855,6 +1855,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 //
 //
 //
@@ -1873,17 +1874,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      name: '',
-      projects: [{
-        projectName: this.$store.state.projects
-      }]
-    };
-  },
+  // data(){
+  //   return {
+  //     name: '',
+  //     projects: [
+  //       {
+  //         projectName: this.$store.state.projects
+  //       } ,
+  //     ]
+  //   }
+  // },
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])({
+    name: "userName"
+  }),
   created: function created() {
-    this.name = this.$store.state.userName;
+    // this.name = this.$store.state.userName;
     this.$store.dispatch("fetchProjects");
   }
 });

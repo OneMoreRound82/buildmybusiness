@@ -22,17 +22,7 @@ import { mapState } from "vuex";
 
 export default {
 
-  // data(){
-  //   return {
-  //     name: '',
-  //     projects: [
-  //       {
-  //         projectName: this.$store.state.projects
-  //       } ,
-  //     ]
-  //   }
-  // },
-
+  
   computed: mapState({ name: "userName" }),
 
   created() {

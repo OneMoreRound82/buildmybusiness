@@ -21,6 +21,7 @@ Route::middleware('auth:api')->group(function (){
   Route::get('/modules', 'ModuleController@index');
   Route::get('/project', 'ProjectController@index');
   Route::post('/logout', 'AuthController@logout');
+  Route::get('/project/{project_id}/modules/{module_id}/tasks/actions', 'TaskController@getTasks');
 
 });
 

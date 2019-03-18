@@ -20,6 +20,8 @@ export const store = new Vuex.Store({
 		userId: localStorage.getItem('loggedin_user') || null,
 		userName: localStorage.getItem('loggedin_username') || null,
 		projects:[],
+		currentProjectId: '',
+		currentProjectName: '',
 	},
 
 
@@ -28,9 +30,8 @@ export const store = new Vuex.Store({
 			state.modules = payload;
 		},
 
-		SET_TASKS: (state, payload) => {
-			state.tasks = payload;
-			//console.log(state.tasks[0].task);
+		SET_TASKS: (state, tasks) => {
+			state.tasks = tasks;
 		},
 
 		SET_ACTIONS: (state, payload) => {
@@ -59,14 +60,21 @@ export const store = new Vuex.Store({
 
 		SET_PROJECTS: (state, projects) => {
 			state.projects = projects;
-		//	console.log(state.projects);
 		},
 		DESTROY_PROJECTS: (state) => {
 			state.projects = [];
 		},
 
+		SET_PROJECT_ID: (state, projectId) => {
+			state.currentProjectId = projectId;
+		},
+		SET_PROJECT_NAME: (state, projectName) => {
+
+			state.currentProjectName = projectName;
+		},
+
 	},
-//Hello
+
 	getters: {
 
 		loggedIn(state){
@@ -80,31 +88,34 @@ export const store = new Vuex.Store({
 
 	actions: {
 
+		setProject(context, projectDetails){
+
+
+			const projectId = projectDetails.projectId;
+			const projectName = projectDetails.projectName;
+
+			context.commit("SET_PROJECT_ID", projectId);
+		  context.commit("SET_PROJECT_NAME", projectName);
+
+
+		},
+
 		fetchProjects(context) {
 
 				axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token;
 				return axios.get('/project').then(response => {
-			//	 let projects = objArray.map(projects = > response.data.project_name]
-				const projectNames = response.data.map(project => project.project_name);
-				// console.log (projectNames)
-				 context.commit("SET_PROJECTS", projectNames);
 
+						const projectNames = response.data.map(project => project);
+						context.commit("SET_PROJECTS", projectNames);
 
-					// const userid = response.data.id
-					// 	localStorage.setItem('loggedin_user', userid)
-					// 	context.commit("SET_USERID", userid);
-					//
-					// const username = response.data.name
-					// 	localStorage.setItem('loggedin_username', username)
-					// 	context.commit("SET_USERNAME", username);
-					});
+				});
 		},
 
 		getUserDetails(context) {
 
 				axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token;
 				return axios.get('/user').then(response => {
-				//	console.log(response.data)
+
 
 					const userid = response.data.id
 						localStorage.setItem('loggedin_user', userid)
@@ -149,13 +160,14 @@ export const store = new Vuex.Store({
 						context.commit("DESTROY_USERNAME")
 						context.commit("DESTROY_PROJECTS")
 						resolve(response)
-						// console.log(response);
+
 					})
 					.catch(error => {
 						localStorage.removeItem('access_token')
 						context.commit("DESTROY_TOKEN")
 						context.commit("DESTROY_USERID")
 						context.commit("DESTROY_USERNAME")
+						context.commit("DESTROY_PROJECTS")
 						reject(error);
 					})
 				})
@@ -172,26 +184,20 @@ export const store = new Vuex.Store({
      	    	});
 			},
 
-			initalizeTasks(context, tasks){
-
-				context.commit("SET_TASKS", tasks);
+			getTasks(context, module){
+			 	return	axios.get(`project/${context.state.currentProjectId}/modules/${module}/tasks/actions`)
+						.then(response => {
+							context.commit("SET_TASKS", response.data);
+						});
 			},
 
 			loadTasks(context, tasks){
-
-				context.commit("SET_TASKS", tasks);
 
 			},
 
 			loadActions(context){
 
-				// axios.get(`api/users/6/responses`).then(response => {
-			  //       console.log(response.data);
-			  //   });
-				// return axios.get(`api/tasks/${context.state.currentTask}/actions/responses`).then(response => {
-			 //        context.commit("SET_ACTIONS", response.data);
 
-			 //    });
 			},
 
 			retrieveToken(context, credentials){
@@ -206,7 +212,7 @@ export const store = new Vuex.Store({
 						localStorage.setItem('access_token', token)
 						context.commit("RETRIEVE_TOKEN", token)
 						resolve(response)
-						// console.log(response);
+
 					})
 					.catch(error => {
 						console.log(error);

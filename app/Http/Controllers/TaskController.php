@@ -82,4 +82,10 @@ class TaskController extends Controller
     {
         //
     }
+
+    public function getTasks($project_id, $module_id)
+    {
+
+      return Task::where('module_id', $module_id)->get();
+    }
 }

@@ -21,31 +21,19 @@ export default {
 			selectedModule: 1,
 			taskTitle: '',
 
-
 		}
 	},
 
 	methods: {
 		selectModule(selectedModule){
 
-			this.selectedModule = selectedModule;
-			this.$store.state.currentModule = selectedModule;
-
-
-			// axios.get(`api/modules/${this.$store.state.currentModule}/tasks`).then(response => this.$store
-			// 		.dispatch("loadTasks", response.data));
-      //
-		 	// axios.get(`api/modules/${this.$store.state.currentModule}/tasks`).then(response => this.$root.formatTask(response.data[0].task));
-
-
-			// CAN I EDIT THE ABOVE CODE SO THE API CALL IS IN THE STORE??
-
+      this.$store
+        .dispatch("getTasks", selectedModule);
 		}
 	},
 
    created() {
 
-        console.log('call one');
         this.$store
 		    .dispatch("loadModules")
 

@@ -5,6 +5,8 @@ import Login from './components/auth/Login.vue';
 import Logout from './components/auth/Logout.vue';
 import Actions from './components/Actions.vue';
 import Dashboard from './components/Dashboard.vue';
+import Tasks from './components/Tasks.vue';
+import Modules from './components/Modules.vue';
 
 const routes = [
     {
@@ -18,20 +20,38 @@ const routes = [
       component: Dashboard,
     },
     {
-      path: '/project',
+      path: '/project/:id',
       name: 'project',
       component: Project,
+      props: true,
       meta: {
         requiresAuth: true,
       },
 
-            children: [
-                {
-                  path: 'actions',
-                  name: 'actions',
-                  component: Actions,
-                },
-              ]
+      children: [
+            {
+              path: 'modules/:module',
+              name: 'modules',
+              component: Modules,
+              props: true,
+
+              children: [
+                      {
+                        path: 'tasks',
+                        name: 'tasks',
+                        component: Tasks,
+
+                    children: [
+                          {
+                            path: 'actions',
+                            name: 'actions',
+                            component: Actions,
+                          },
+                    ],
+                  },
+              ],
+            },
+        ],
     },
     {
       path: '/register',

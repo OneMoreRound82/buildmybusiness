@@ -7,11 +7,11 @@
         <h2>This is your Dashboard.</h2>
     </div>
     <div>
-    <p>To view your projects, choose one from the list below</p>
-    <li><router-link to='/project/actions'>View Project</router-link></li>
-
+    <p>To view your projects, choose one from the list below:</p>
     <ul>
-      <li v-for="(project, id) in projects" :key="id"> {{ project }} </li>
+        <li v-for="(project, id) in projects" :key="id">
+          <router-link @click.native="setProject(project.id, project.project_name)" :to="{ name: 'actions', params: { id:project.id ,  module:module }}"> {{ project.project_name }} </router-link>
+        </li>
     </ul>
   </div>
 </div>
@@ -25,16 +25,29 @@ export default {
 
   computed: mapState({
     name: "userName",
-    projects: "projects"
+    projects: "projects",
+    module: "currentModule"
   }),
 
   created() {
 
-      // this.name = this.$store.state.userName;
-
-       this.$store
+     this.$store
        .dispatch("fetchProjects")
 
   },
+
+  methods: {
+    setProject(projectId, projectName){
+
+     const $projectDetails = { projectId, projectName }
+
+      this.$store
+        .dispatch("setProject", $projectDetails);
+
+        this.$store
+          .dispatch("getTasks", this.module);
+
+    }
+  }
 }
 </script>

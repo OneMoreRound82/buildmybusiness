@@ -13,6 +13,7 @@ export const store = new Vuex.Store({
 		token: localStorage.getItem('access_token') || null,
 		requiredTask: 'This is my current task',
 		currentModule: '1',
+		currentModuleName: 'Product & Service Analysis',
 		currentTask: '1',
 		modules:[],
 		tasks:[],
@@ -32,6 +33,10 @@ export const store = new Vuex.Store({
 
 		SET_TASKS: (state, tasks) => {
 			state.tasks = tasks;
+		},
+
+		SET_MODULE_TITLE: (state, moduleTitle) => {
+			state.currentModuleName = moduleTitle
 		},
 
 		SET_ACTIONS: (state, payload) => {
@@ -184,16 +189,21 @@ export const store = new Vuex.Store({
      	    	});
 			},
 
-			getTasks(context, module){
-			 	return	axios.get(`project/${context.state.currentProjectId}/modules/${module}/tasks/actions`)
+			getTasks(context, moduleDetails){
+
+				var moduleTitle = moduleDetails.moduleName;
+				var moduleTitle = (moduleTitle === undefined) ? moduleTitle = 'Product & Service Analysis' : moduleTitle;
+
+				var moduleId = moduleDetails.moduleId;
+				var moduleId = (moduleId === undefined) ? moduleId = 1 : moduleId;
+
+			 	return	axios.get(`project/${context.state.currentProjectId}/modules/${moduleId}/tasks/actions`)
 						.then(response => {
 							context.commit("SET_TASKS", response.data);
+							context.commit("SET_MODULE_TITLE", moduleTitle);
 						});
 			},
 
-			loadTasks(context, tasks){
-
-			},
 
 			loadActions(context){
 

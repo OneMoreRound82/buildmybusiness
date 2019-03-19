@@ -3,7 +3,7 @@
     <h2>Modules:</h2>
     <ul class="Modules-Sidebar">
       <li v-for="module in this.$store.state.modules" :class="{ 'is-active' : selectedModule === module.id }">
-		    	<a href="#"  @click="selectModule(module.id)">{{ module.module }}</a></li>
+		    	<a href="#"  @click="selectModule(module.id, module.module)">{{ module.module }}</a></li>
 
     </ul>
   </div>
@@ -25,10 +25,11 @@ export default {
 	},
 
 	methods: {
-		selectModule(selectedModule){
-
+		selectModule(moduleId, moduleName ){
+      const $moduleDetails = { moduleId, moduleName }
+      //console.log($moduleDetails);
       this.$store
-        .dispatch("getTasks", selectedModule);
+        .dispatch("getTasks", $moduleDetails);
 		}
 	},
 

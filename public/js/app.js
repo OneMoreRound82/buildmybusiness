@@ -1973,8 +1973,13 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    selectModule: function selectModule(selectedModule) {
-      this.$store.dispatch("getTasks", selectedModule);
+    selectModule: function selectModule(moduleId, moduleName) {
+      var $moduleDetails = {
+        moduleId: moduleId,
+        moduleName: moduleName //console.log($moduleDetails);
+
+      };
+      this.$store.dispatch("getTasks", $moduleDetails);
     }
   },
   created: function created() {
@@ -1993,8 +1998,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ModulesSidebar_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ModulesSidebar.vue */ "./resources/js/components/ModulesSidebar.vue");
-/* harmony import */ var _Tasks_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Tasks.vue */ "./resources/js/components/Tasks.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _ModulesSidebar_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModulesSidebar.vue */ "./resources/js/components/ModulesSidebar.vue");
+/* harmony import */ var _Tasks_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Tasks.vue */ "./resources/js/components/Tasks.vue");
 //
 //
 //
@@ -2021,13 +2027,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])({
+    projectName: "currentProjectName"
+  }),
   components: {
-    'modules-sidebar': _ModulesSidebar_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    'tasks': _Tasks_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    'modules-sidebar': _ModulesSidebar_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    'tasks': _Tasks_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
@@ -2058,10 +2067,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])({
     module: "currentModule",
+    moduleName: "currentModuleName",
     projects: "projects",
     projectId: "currentProjectId",
     projectName: "currentProjectName",
@@ -58997,7 +59008,7 @@ var render = function() {
                 attrs: { href: "#" },
                 on: {
                   click: function($event) {
-                    return _vm.selectModule(module.id)
+                    return _vm.selectModule(module.id, module.module)
                   }
                 }
               },
@@ -59033,7 +59044,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("header", [_c("h1", [_vm._v(_vm._s(_vm.title))])]),
+    _c("header", [_c("h1", [_vm._v(_vm._s(_vm.projectName))])]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c(
@@ -59076,9 +59087,7 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("h1", [
-        _vm._v("This is your Task Sheet for " + _vm._s(_vm.projectName))
-      ]),
+      _c("h1", [_vm._v("Your current module is " + _vm._s(_vm.moduleName))]),
       _vm._v(" "),
       _vm._l(_vm.tasks, function(task) {
         return _c("li", [_vm._v(_vm._s(task.task))])
@@ -75413,15 +75422,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************************!*\
   !*** ./resources/js/components/Dashboard.vue ***!
   \***********************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Dashboard_vue_vue_type_template_id_040e2ab9___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Dashboard.vue?vue&type=template&id=040e2ab9& */ "./resources/js/components/Dashboard.vue?vue&type=template&id=040e2ab9&");
 /* harmony import */ var _Dashboard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Dashboard.vue?vue&type=script&lang=js& */ "./resources/js/components/Dashboard.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Dashboard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Dashboard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -75451,7 +75459,7 @@ component.options.__file = "resources/js/components/Dashboard.vue"
 /*!************************************************************************!*\
   !*** ./resources/js/components/Dashboard.vue?vue&type=script&lang=js& ***!
   \************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -76139,6 +76147,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     token: localStorage.getItem('access_token') || null,
     requiredTask: 'This is my current task',
     currentModule: '1',
+    currentModuleName: 'Product & Service Analysis',
     currentTask: '1',
     modules: [],
     tasks: [],
@@ -76155,6 +76164,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     },
     SET_TASKS: function SET_TASKS(state, tasks) {
       state.tasks = tasks;
+    },
+    SET_MODULE_TITLE: function SET_MODULE_TITLE(state, moduleTitle) {
+      state.currentModuleName = moduleTitle;
     },
     SET_ACTIONS: function SET_ACTIONS(state, payload) {
       state.actions = payload;
@@ -76267,12 +76279,16 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
         context.commit("SET_MODULES", response.data);
       });
     },
-    getTasks: function getTasks(context, module) {
-      return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("project/".concat(context.state.currentProjectId, "/modules/").concat(module, "/tasks/actions")).then(function (response) {
+    getTasks: function getTasks(context, moduleDetails) {
+      var moduleTitle = moduleDetails.moduleName;
+      var moduleTitle = moduleTitle === undefined ? moduleTitle = 'Product & Service Analysis' : moduleTitle;
+      var moduleId = moduleDetails.moduleId;
+      var moduleId = moduleId === undefined ? moduleId = 1 : moduleId;
+      return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("project/".concat(context.state.currentProjectId, "/modules/").concat(moduleId, "/tasks/actions")).then(function (response) {
         context.commit("SET_TASKS", response.data);
+        context.commit("SET_MODULE_TITLE", moduleTitle);
       });
     },
-    loadTasks: function loadTasks(context, tasks) {},
     loadActions: function loadActions(context) {},
     retrieveToken: function retrieveToken(context, credentials) {
       return new Promise(function (resolve, reject) {

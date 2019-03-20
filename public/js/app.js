@@ -1,6 +1,50 @@
 /******/ (function(modules) { // webpackBootstrap
+/******/ 	// install a JSONP callback for chunk loading
+/******/ 	function webpackJsonpCallback(data) {
+/******/ 		var chunkIds = data[0];
+/******/ 		var moreModules = data[1];
+/******/
+/******/
+/******/ 		// add "moreModules" to the modules object,
+/******/ 		// then flag all "chunkIds" as loaded and fire callback
+/******/ 		var moduleId, chunkId, i = 0, resolves = [];
+/******/ 		for(;i < chunkIds.length; i++) {
+/******/ 			chunkId = chunkIds[i];
+/******/ 			if(installedChunks[chunkId]) {
+/******/ 				resolves.push(installedChunks[chunkId][0]);
+/******/ 			}
+/******/ 			installedChunks[chunkId] = 0;
+/******/ 		}
+/******/ 		for(moduleId in moreModules) {
+/******/ 			if(Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
+/******/ 				modules[moduleId] = moreModules[moduleId];
+/******/ 			}
+/******/ 		}
+/******/ 		if(parentJsonpFunction) parentJsonpFunction(data);
+/******/
+/******/ 		while(resolves.length) {
+/******/ 			resolves.shift()();
+/******/ 		}
+/******/
+/******/ 	};
+/******/
+/******/
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
+/******/
+/******/ 	// object to store loaded and loading chunks
+/******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 	// Promise = chunk loading, 0 = chunk loaded
+/******/ 	var installedChunks = {
+/******/ 		"/js/app": 0
+/******/ 	};
+/******/
+/******/
+/******/
+/******/ 	// script path function
+/******/ 	function jsonpScriptSrc(chunkId) {
+/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + ".js"
+/******/ 	}
 /******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
@@ -26,6 +70,64 @@
 /******/ 		return module.exports;
 /******/ 	}
 /******/
+/******/ 	// This file contains only the entry chunk.
+/******/ 	// The chunk loading function for additional chunks
+/******/ 	__webpack_require__.e = function requireEnsure(chunkId) {
+/******/ 		var promises = [];
+/******/
+/******/
+/******/ 		// JSONP chunk loading for javascript
+/******/
+/******/ 		var installedChunkData = installedChunks[chunkId];
+/******/ 		if(installedChunkData !== 0) { // 0 means "already installed".
+/******/
+/******/ 			// a Promise means "currently loading".
+/******/ 			if(installedChunkData) {
+/******/ 				promises.push(installedChunkData[2]);
+/******/ 			} else {
+/******/ 				// setup Promise in chunk cache
+/******/ 				var promise = new Promise(function(resolve, reject) {
+/******/ 					installedChunkData = installedChunks[chunkId] = [resolve, reject];
+/******/ 				});
+/******/ 				promises.push(installedChunkData[2] = promise);
+/******/
+/******/ 				// start chunk loading
+/******/ 				var script = document.createElement('script');
+/******/ 				var onScriptComplete;
+/******/
+/******/ 				script.charset = 'utf-8';
+/******/ 				script.timeout = 120;
+/******/ 				if (__webpack_require__.nc) {
+/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
+/******/ 				}
+/******/ 				script.src = jsonpScriptSrc(chunkId);
+/******/
+/******/ 				onScriptComplete = function (event) {
+/******/ 					// avoid mem leaks in IE.
+/******/ 					script.onerror = script.onload = null;
+/******/ 					clearTimeout(timeout);
+/******/ 					var chunk = installedChunks[chunkId];
+/******/ 					if(chunk !== 0) {
+/******/ 						if(chunk) {
+/******/ 							var errorType = event && (event.type === 'load' ? 'missing' : event.type);
+/******/ 							var realSrc = event && event.target && event.target.src;
+/******/ 							var error = new Error('Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')');
+/******/ 							error.type = errorType;
+/******/ 							error.request = realSrc;
+/******/ 							chunk[1](error);
+/******/ 						}
+/******/ 						installedChunks[chunkId] = undefined;
+/******/ 					}
+/******/ 				};
+/******/ 				var timeout = setTimeout(function(){
+/******/ 					onScriptComplete({ type: 'timeout', target: script });
+/******/ 				}, 120000);
+/******/ 				script.onerror = script.onload = onScriptComplete;
+/******/ 				document.head.appendChild(script);
+/******/ 			}
+/******/ 		}
+/******/ 		return Promise.all(promises);
+/******/ 	};
 /******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
@@ -78,6 +180,16 @@
 /******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "/";
+/******/
+/******/ 	// on error function for async loading
+/******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
+/******/
+/******/ 	var jsonpArray = window["webpackJsonp"] = window["webpackJsonp"] || [];
+/******/ 	var oldJsonpFunction = jsonpArray.push.bind(jsonpArray);
+/******/ 	jsonpArray.push = webpackJsonpCallback;
+/******/ 	jsonpArray = jsonpArray.slice();
+/******/ 	for(var i = 0; i < jsonpArray.length; i++) webpackJsonpCallback(jsonpArray[i]);
+/******/ 	var parentJsonpFunction = oldJsonpFunction;
 /******/
 /******/
 /******/ 	// Load entry module and return exports
@@ -1952,6 +2064,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1965,9 +2090,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])(_defineProperty({
+    modules: "currentModule",
+    moduleName: "currentModuleName"
+  }, "modules", "modules")),
   data: function data() {
     return {
-      modules: [],
+      // modules:[],
       selectedModule: 1,
       taskTitle: ''
     };
@@ -1976,8 +2105,7 @@ __webpack_require__.r(__webpack_exports__);
     selectModule: function selectModule(moduleId, moduleName) {
       var $moduleDetails = {
         moduleId: moduleId,
-        moduleName: moduleName //console.log($moduleDetails);
-
+        moduleName: moduleName
       };
       this.$store.dispatch("getTasks", $moduleDetails);
     }
@@ -2000,7 +2128,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _ModulesSidebar_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModulesSidebar.vue */ "./resources/js/components/ModulesSidebar.vue");
-/* harmony import */ var _Tasks_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Tasks.vue */ "./resources/js/components/Tasks.vue");
 //
 //
 //
@@ -2025,9 +2152,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2035,13 +2159,7 @@ __webpack_require__.r(__webpack_exports__);
     projectName: "currentProjectName"
   }),
   components: {
-    'modules-sidebar': _ModulesSidebar_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
-    'tasks': _Tasks_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
-  },
-  data: function data() {
-    return {
-      title: 'Your Project'
-    };
+    'modules-sidebar': _ModulesSidebar_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 });
 
@@ -2056,7 +2174,21 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _Actions_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Actions.vue */ "./resources/js/components/Actions.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2069,15 +2201,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])({
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['SelectedTaskURL']), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])({
     module: "currentModule",
     moduleName: "currentModuleName",
     projects: "projects",
     projectId: "currentProjectId",
     projectName: "currentProjectName",
-    tasks: "tasks"
-  })
+    tasks: "tasks",
+    // taskURL: "taskURL",
+    taskComponent: function taskComponent() {
+      var _this = this;
+
+      console.log("./ProductServiceAnalysis/".concat(this.$store.getters['SelectedTaskURL'], ".vue"));
+      return function () {
+        return __webpack_require__("./resources/js/components/ProductServiceAnalysis lazy recursive ^\\.\\/.*\\.vue$")("./".concat(_this.$store.getters['SelectedTaskURL'], ".vue"));
+      };
+    }
+  })),
+  methods: {
+    setActionsURL: function setActionsURL(selectedTask) {
+      this.$store.dispatch("setActionsURL", selectedTask);
+    }
+  }
 });
 
 /***/ }),
@@ -58886,7 +59033,7 @@ var render = function() {
                 {
                   attrs: {
                     to: {
-                      name: "actions",
+                      name: "module",
                       params: { id: project.id, module: _vm.module }
                     }
                   },
@@ -58997,24 +59144,27 @@ var render = function() {
     _c(
       "ul",
       { staticClass: "Modules-Sidebar" },
-      _vm._l(this.$store.state.modules, function(module) {
+      _vm._l(_vm.modules, function(module, id) {
         return _c(
           "li",
-          { class: { "is-active": _vm.selectedModule === module.id } },
+          { key: id },
           [
             _c(
-              "a",
+              "router-link",
               {
-                attrs: { href: "#" },
-                on: {
+                attrs: {
+                  to: { name: "module", params: { module: module.id } }
+                },
+                nativeOn: {
                   click: function($event) {
                     return _vm.selectModule(module.id, module.module)
                   }
                 }
               },
-              [_vm._v(_vm._s(module.module))]
+              [_vm._v(" " + _vm._s(module.module) + " ")]
             )
-          ]
+          ],
+          1
         )
       }),
       0
@@ -59054,11 +59204,7 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col" }, [_c("tasks")], 1),
-        _vm._v(" "),
-        _c("div", { staticClass: "col" }, [_c("router-view")], 1)
-      ])
+      _c("div", { staticClass: "col" }, [_c("router-view")], 1)
     ])
   ])
 }
@@ -59089,9 +59235,24 @@ var render = function() {
     [
       _c("h1", [_vm._v("Your current module is " + _vm._s(_vm.moduleName))]),
       _vm._v(" "),
-      _vm._l(_vm.tasks, function(task) {
-        return _c("li", [_vm._v(_vm._s(task.task))])
-      })
+      _vm._l(_vm.tasks, function(task, id) {
+        return _c("li", { key: id }, [
+          _c(
+            "a",
+            {
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  return _vm.setActionsURL(task.url)
+                }
+              }
+            },
+            [_vm._v(_vm._s(task.task))]
+          )
+        ])
+      }),
+      _vm._v(" "),
+      _c("div", [_c(_vm.taskComponent, { tag: "component" })], 1)
     ],
     2
   )
@@ -75240,6 +75401,8 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
+ // import "core-js/modules/es6.promise";
+// import "core-js/modules/es6.array.iterator";
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.config.productionTip = false;
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]);
@@ -75694,6 +75857,57 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/ProductServiceAnalysis lazy recursive ^\\.\\/.*\\.vue$":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/ProductServiceAnalysis lazy ^\.\/.*\.vue$ namespace object ***!
+  \********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./define-features-benefits.vue": [
+		"./resources/js/components/ProductServiceAnalysis/define-features-benefits.vue",
+		1
+	],
+	"./define-market-need.vue": [
+		"./resources/js/components/ProductServiceAnalysis/define-market-need.vue",
+		2
+	],
+	"./define-product-service.vue": [
+		"./resources/js/components/ProductServiceAnalysis/define-product-service.vue",
+		3
+	],
+	"./define-value-proposition.vue": [
+		"./resources/js/components/ProductServiceAnalysis/define-value-proposition.vue",
+		4
+	],
+	"./identify-differentiation.vue": [
+		"./resources/js/components/ProductServiceAnalysis/identify-differentiation.vue",
+		5
+	]
+};
+function webpackAsyncContext(req) {
+	if(!__webpack_require__.o(map, req)) {
+		return Promise.resolve().then(function() {
+			var e = new Error("Cannot find module '" + req + "'");
+			e.code = 'MODULE_NOT_FOUND';
+			throw e;
+		});
+	}
+
+	var ids = map[req], id = ids[0];
+	return __webpack_require__.e(ids[1]).then(function() {
+		return __webpack_require__(id);
+	});
+}
+webpackAsyncContext.keys = function webpackAsyncContextKeys() {
+	return Object.keys(map);
+};
+webpackAsyncContext.id = "./resources/js/components/ProductServiceAnalysis lazy recursive ^\\.\\/.*\\.vue$";
+module.exports = webpackAsyncContext;
+
+/***/ }),
+
 /***/ "./resources/js/components/Project.vue":
 /*!*********************************************!*\
   !*** ./resources/js/components/Project.vue ***!
@@ -76083,20 +76297,26 @@ var routes = [{
     requiresAuth: true
   },
   children: [{
-    path: 'modules/:module',
-    name: 'modules',
-    component: _components_Modules_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
-    props: true,
-    children: [{
-      path: 'tasks',
-      name: 'tasks',
-      component: _components_Tasks_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
-      children: [{
-        path: 'actions',
-        name: 'actions',
-        component: _components_Actions_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
-      }]
-    }]
+    path: 'module/:module',
+    name: 'module',
+    component: _components_Tasks_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
+    props: true // children: [
+    //         {
+    //           path: 'task/:url',
+    //           name: 'task',
+    //           component: DefineFeaturesBenefits,
+    //           props: true,
+    //
+    //       // children: [
+    //       //       {
+    //       //         path: 'actions',
+    //       //         name: 'actions',
+    //       //         component: Actions,
+    //       //       },
+    //       // ],
+    //     },
+    // ],
+
   }]
 }, {
   path: '/register',
@@ -76117,7 +76337,12 @@ var routes = [{
   name: 'logout',
   component: _components_auth_Logout_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
 }];
-/* harmony default export */ __webpack_exports__["default"] = (routes);
+/* harmony default export */ __webpack_exports__["default"] = (routes); // export default {
+//   components:{
+//
+//     'actions': Temp
+//   }
+// }
 
 /***/ }),
 
@@ -76151,12 +76376,14 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     currentTask: '1',
     modules: [],
     tasks: [],
+    taskName: [],
     actions: [],
     userId: localStorage.getItem('loggedin_user') || null,
     userName: localStorage.getItem('loggedin_username') || null,
     projects: [],
     currentProjectId: '',
-    currentProjectName: ''
+    currentProjectName: '',
+    taskURL: 'define-product-service'
   },
   mutations: {
     SET_MODULES: function SET_MODULES(state, payload) {
@@ -76200,17 +76427,23 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     },
     SET_PROJECT_NAME: function SET_PROJECT_NAME(state, projectName) {
       state.currentProjectName = projectName;
+    },
+    SET_ACTION_URL: function SET_ACTION_URL(state, taskURL) {
+      state.taskURL = taskURL;
     }
   },
   getters: {
     loggedIn: function loggedIn(state) {
       return state.token !== null;
     },
-    getTask: function getTask(state) {
-      return state.requiredTask;
+    SelectedTaskURL: function SelectedTaskURL(state) {
+      return state.taskURL;
     }
   },
   actions: {
+    setActionsURL: function setActionsURL(context, taskURL) {
+      context.commit("SET_ACTION_URL", taskURL);
+    },
     setProject: function setProject(context, projectDetails) {
       var projectId = projectDetails.projectId;
       var projectName = projectDetails.projectName;
@@ -76281,14 +76514,16 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     },
     getTasks: function getTasks(context, moduleDetails) {
       var moduleTitle = moduleDetails.moduleName;
-      var moduleTitle = moduleTitle === undefined ? moduleTitle = 'Product & Service Analysis' : moduleTitle;
+      var moduleTitle = moduleTitle === undefined ? moduleTitle = 'Product & Service Analysis' : moduleTitle; //console.log(moduleTitle);
+
       var moduleId = moduleDetails.moduleId;
       var moduleId = moduleId === undefined ? moduleId = 1 : moduleId;
-      return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("project/".concat(context.state.currentProjectId, "/modules/").concat(moduleId, "/tasks/actions")).then(function (response) {
+      return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("project/".concat(context.state.currentProjectId, "/module/").concat(moduleId)).then(function (response) {
         context.commit("SET_TASKS", response.data);
         context.commit("SET_MODULE_TITLE", moduleTitle);
       });
     },
+    loadTasks: function loadTasks(context, tasks) {},
     loadActions: function loadActions(context) {},
     retrieveToken: function retrieveToken(context, credentials) {
       return new Promise(function (resolve, reject) {

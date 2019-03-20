@@ -15,40 +15,49 @@ class TasksSeeder extends Seeder
         $tasks = [
         	['task' => 'Define product/service',
         	 'module_id' => '1',
-        	 'task_num' => '1'],
+        	 'task_num' => '1',
+           'url' => 'define-product-service'],
 
         	 ['task' => 'Define features & benefits',
         	 'module_id' => '1',
-        	 'task_num' => '2'],
+        	 'task_num' => '2',
+           'url' => 'define-features-benefits'],
 
         	 ['task' => 'Define the market need',
         	 'module_id' => '1',
-        	 'task_num' => '3'],
+        	 'task_num' => '3',
+           'url' => 'define-market-need'],
 
         	 ['task' => 'Identify differentiation',
         	 'module_id' => '1',
-        	 'task_num' => '4'],
+        	 'task_num' => '4',
+           'url' => 'identify-differentiation'],
 
         	 ['task' => 'Define value proposition',
         	 'module_id' => '1',
-        	 'task_num' => '5'],
+        	 'task_num' => '5',
+           'url' => 'define-value-proposition'],
 
 
         	 ['task' => 'Define current market sectors',
         	 'module_id' => '2',
-        	 'task_num' => '1'],
+        	 'task_num' => '1',
+           'url' => 'define-current-market-sectors'],
 
         	 ['task' => 'Identify market growth rates',
         	 'module_id' => '2',
-        	 'task_num' => '2'],
+        	 'task_num' => '2',
+           'url' => 'identify-market-growth-rates'],
 
         	 ['task' => 'Identify new market sectors',
         	 'module_id' => '2',
-        	 'task_num' => '3'],
+        	 'task_num' => '3',
+           'url' => 'identify-new-market-sectors'],
 
         	 ['task' => 'Define current distribution channels',
         	 'module_id' => '2',
-        	 'task_num' => '4'],
+        	 'task_num' => '4',
+           'url' => 'define-current-distribution-channels'],
 
 
         	 ['task' => 'Profile current customer data',
@@ -267,7 +276,7 @@ class TasksSeeder extends Seeder
 
         ];
 
-        
+
 
         foreach ($tasks as $task){
         	Task::create($task);

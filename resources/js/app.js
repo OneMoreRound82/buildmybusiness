@@ -12,6 +12,8 @@ import BootstrapVue from 'bootstrap-vue'
 import { store } from './store/store';
 import Vuex from 'vuex'
 
+// import "core-js/modules/es6.promise";
+// import "core-js/modules/es6.array.iterator";
 
 Vue.config.productionTip = false;
 

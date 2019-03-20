@@ -17,12 +17,14 @@ export const store = new Vuex.Store({
 		currentTask: '1',
 		modules:[],
 		tasks:[],
+		taskName:[],
 		actions:[],
 		userId: localStorage.getItem('loggedin_user') || null,
 		userName: localStorage.getItem('loggedin_username') || null,
 		projects:[],
 		currentProjectId: '',
 		currentProjectName: '',
+		taskURL: 'define-product-service',
 	},
 
 
@@ -56,12 +58,14 @@ export const store = new Vuex.Store({
 			state.userId = null;
 		},
 
+
 		SET_USERNAME: (state, username) => {
 			state.userName = username;
 		},
 		DESTROY_USERNAME: (state) => {
 			state.userName = '';
 		},
+
 
 		SET_PROJECTS: (state, projects) => {
 			state.projects = projects;
@@ -70,12 +74,17 @@ export const store = new Vuex.Store({
 			state.projects = [];
 		},
 
+
 		SET_PROJECT_ID: (state, projectId) => {
 			state.currentProjectId = projectId;
 		},
 		SET_PROJECT_NAME: (state, projectName) => {
-
 			state.currentProjectName = projectName;
+		},
+
+
+		SET_ACTION_URL: (state, taskURL) => {
+			state.taskURL = taskURL;
 		},
 
 	},
@@ -85,23 +94,28 @@ export const store = new Vuex.Store({
 		loggedIn(state){
 			return state.token !== null;
 		},
-		getTask(state) {
-			return state.requiredTask;
+
+		SelectedTaskURL(state) {
+			return state.taskURL;
 		}
 	},
 
 
 	actions: {
 
-		setProject(context, projectDetails){
+		setActionsURL(context, taskURL){
 
+			context.commit("SET_ACTION_URL", taskURL);
+
+		},
+
+		setProject(context, projectDetails){
 
 			const projectId = projectDetails.projectId;
 			const projectName = projectDetails.projectName;
 
 			context.commit("SET_PROJECT_ID", projectId);
 		  context.commit("SET_PROJECT_NAME", projectName);
-
 
 		},
 
@@ -191,19 +205,25 @@ export const store = new Vuex.Store({
 
 			getTasks(context, moduleDetails){
 
+
 				var moduleTitle = moduleDetails.moduleName;
 				var moduleTitle = (moduleTitle === undefined) ? moduleTitle = 'Product & Service Analysis' : moduleTitle;
+				//console.log(moduleTitle);
 
 				var moduleId = moduleDetails.moduleId;
 				var moduleId = (moduleId === undefined) ? moduleId = 1 : moduleId;
 
-			 	return	axios.get(`project/${context.state.currentProjectId}/modules/${moduleId}/tasks/actions`)
+			 	return	axios.get(`project/${context.state.currentProjectId}/module/${moduleId}`)
 						.then(response => {
 							context.commit("SET_TASKS", response.data);
+
 							context.commit("SET_MODULE_TITLE", moduleTitle);
 						});
 			},
 
+			loadTasks(context, tasks){
+
+			},
 
 			loadActions(context){
 

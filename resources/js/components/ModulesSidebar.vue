@@ -2,8 +2,19 @@
   <div>
     <h2>Modules:</h2>
     <ul class="Modules-Sidebar">
-      <li v-for="module in this.$store.state.modules" :class="{ 'is-active' : selectedModule === module.id }">
-		    	<a href="#"  @click="selectModule(module.id, module.module)">{{ module.module }}</a></li>
+
+      <!-- <li v-for="module in this.$store.state.modules" :class="{ 'is-active' : selectedModule === module.id }"> -->
+		    	<!-- <a href="#"  ></a></li> -->
+
+          <!-- <li v-for="module in this.$store.state.modules" :class="{ 'is-active' : selectedModule === module.id }"> -->
+              <!-- <li v-for="(module, id) in modules" :key="id">
+            <router-link @click="selectModule(module.id, module.module)" :to="{ name: 'module', params: { module:module.id }}"> {{ module.module }} </router-link>
+          </li> -->
+
+          <li v-for="(module, id) in modules" :key="id">
+        <router-link @click.native="selectModule(module.id, module.module)" :to="{ name: 'module', params: { module:module.id }}"> {{ module.module }} </router-link>
+      </li>
+
 
     </ul>
   </div>
@@ -15,9 +26,19 @@ import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 
 
 export default {
+
+  computed: mapState({
+
+    modules: "currentModule",
+    moduleName: "currentModuleName",
+    modules: "modules",
+
+
+  }),
+
   data: function() {
 		return {
-			modules:[],
+			// modules:[],
 			selectedModule: 1,
 			taskTitle: '',
 
@@ -26,8 +47,10 @@ export default {
 
 	methods: {
 		selectModule(moduleId, moduleName ){
+
+
       const $moduleDetails = { moduleId, moduleName }
-      //console.log($moduleDetails);
+
       this.$store
         .dispatch("getTasks", $moduleDetails);
 		}

@@ -1,3 +1,5 @@
+
+
 import Home from './components/Home.vue';
 import Project from './components/Project.vue';
 import Register from './components/auth/Register.vue';
@@ -7,6 +9,8 @@ import Actions from './components/Actions.vue';
 import Dashboard from './components/Dashboard.vue';
 import Tasks from './components/Tasks.vue';
 import Modules from './components/Modules.vue';
+
+
 
 const routes = [
     {
@@ -30,26 +34,27 @@ const routes = [
 
       children: [
             {
-              path: 'modules/:module',
-              name: 'modules',
-              component: Modules,
+              path: 'module/:module',
+              name: 'module',
+              component: Tasks,
               props: true,
 
-              children: [
-                      {
-                        path: 'tasks',
-                        name: 'tasks',
-                        component: Tasks,
-
-                    children: [
-                          {
-                            path: 'actions',
-                            name: 'actions',
-                            component: Actions,
-                          },
-                    ],
-                  },
-              ],
+              // children: [
+              //         {
+              //           path: 'task/:url',
+              //           name: 'task',
+              //           component: DefineFeaturesBenefits,
+              //           props: true,
+              //
+              //       // children: [
+              //       //       {
+              //       //         path: 'actions',
+              //       //         name: 'actions',
+              //       //         component: Actions,
+              //       //       },
+              //       // ],
+              //     },
+              // ],
             },
         ],
     },
@@ -77,3 +82,10 @@ const routes = [
 ];
 
 export default routes;
+
+// export default {
+//   components:{
+//
+//     'actions': Temp
+//   }
+// }

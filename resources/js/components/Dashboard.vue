@@ -10,7 +10,7 @@
     <p>To view your projects, choose one from the list below:</p>
     <ul>
         <li v-for="(project, id) in projects" :key="id">
-          <router-link @click.native="setProject(project.id, project.project_name)" :to="{ name: 'actions', params: { id:project.id ,  module:module }}"> {{ project.project_name }} </router-link>
+          <router-link @click.native="setProject(project.id, project.project_name)" :to="{ name: 'module', params: { id:project.id ,  module:module }}"> {{ project.project_name }} </router-link>
         </li>
     </ul>
   </div>

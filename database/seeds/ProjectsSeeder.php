@@ -18,6 +18,15 @@ class ProjectsSeeder extends Seeder
 
         	['project_name' => 'Jobs4Everyone',
         	'user_id'=> '2'],
+
+        	['project_name' => 'Julies Music',
+        	'user_id'=> '3'],
+
+        	['project_name' => 'Julies Artwork',
+        	'user_id'=> '3'],
+
+        	['project_name' => 'Julies Shoes',
+        	'user_id'=> '3'],
         ];
 
         foreach ($projects as $project){

@@ -11,5 +11,15 @@ const mix = require('laravel-mix');
  |
  */
 
+ const config = {
+   entry: [
+     "core-js/modules/es6.promise",
+     "core-js/modules/es6.array.iterator",
+     path.resolve(__dirname, "src/main.js"),
+   ],
+   // ...
+ };
+
+
 mix.js('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css');

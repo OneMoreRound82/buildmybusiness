@@ -44,7 +44,7 @@ export default {
       })
         .then(response => {
           this.$store.dispatch("getUserDetails")
-          this.$router.push({ name: 'dashboard' })          
+          this.$router.push({ name: 'dashboard' })
         })
 
     }

@@ -1,4 +1,6 @@
-
+import Vue from "vue";
+import Router from "vue-router";
+import store from "./store/store";
 
 import Home from './components/Home.vue';
 import Project from './components/Project.vue';
@@ -11,12 +13,24 @@ import Tasks from './components/Tasks.vue';
 import Modules from './components/Modules.vue';
 
 
+import { state }  from './store/store';
+import { mapState, mapGetters } from "vuex";
 
-const routes = [
+Vue.use(Router);
+console.log(`./components/ProductServiceAnalysis/${state.taskURL}.vue`);
+
+export default new Router ({
+
+ routes: [
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      beforeEnter: (to, from, next) => {
+
+          console.log('hello ', state.taskURL);
+          next();
+        },
     },
     {
       path: '/dashboard',
@@ -39,22 +53,26 @@ const routes = [
               component: Tasks,
               props: true,
 
-              // children: [
-              //         {
-              //           path: 'task/:url',
-              //           name: 'task',
-              //           component: DefineFeaturesBenefits,
-              //           props: true,
-              //
-              //       // children: [
-              //       //       {
-              //       //         path: 'actions',
-              //       //         name: 'actions',
-              //       //         component: Actions,
-              //       //       },
-              //       // ],
-              //     },
-              // ],
+
+              children: [
+                      {
+                        path: 'task/:url',
+                        name: 'task',
+                        component:
+                          require(`./components/ProductServiceAnalysis/${state.taskURL}.vue`),
+
+
+                        props: true,
+
+                    // children: [
+                    //       {
+                    //         path: 'actions',
+                    //         name: 'actions',
+                    //         component: Actions,
+                    //       },
+                    // ],
+                  },
+              ],
             },
         ],
     },
@@ -79,13 +97,8 @@ const routes = [
       name: 'logout',
       component: Logout
     },
-];
+]
 
-export default routes;
+})
 
-// export default {
-//   components:{
-//
-//     'actions': Temp
-//   }
-// }
+// export default routes;

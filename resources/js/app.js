@@ -7,13 +7,12 @@ import App from './App.vue';
 import VueRouter from 'vue-router';
 import VueAxios from 'vue-axios';
 import axios from 'axios';
-import routes from './routes';
+//import routes from './routes';
 import BootstrapVue from 'bootstrap-vue'
 import { store } from './store/store';
 import Vuex from 'vuex'
+import router from "./routes";
 
-// import "core-js/modules/es6.promise";
-// import "core-js/modules/es6.array.iterator";
 
 Vue.config.productionTip = false;
 
@@ -22,10 +21,12 @@ Vue.use(VueAxios, axios);
 Vue.use(BootstrapVue);
 Vue.use(Vuex);
 
-const router = new VueRouter({
-  routes,
-  mode: 'history'
-})
+// const router = new VueRouter({
+//
+//   store: store,
+//   routes,
+//   mode: 'history'
+// })
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {

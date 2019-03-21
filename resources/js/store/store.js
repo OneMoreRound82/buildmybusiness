@@ -7,26 +7,27 @@ axios.defaults.baseURL = 'http://buildmybusiness.test/api'
 
 Vue.config.devtools = true;
 
+export const state = {
+	token: localStorage.getItem('access_token') || null,
+	requiredTask: 'This is my current task',
+	currentModule: '1',
+	currentModuleName: 'Product & Service Analysis',
+	currentTask: '1',
+	modules:[],
+	tasks:[],
+	taskName:[],
+	actions:[],
+	userId: localStorage.getItem('loggedin_user') || null,
+	userName: localStorage.getItem('loggedin_username') || null,
+	projects:[],
+	currentProjectId: '',
+	currentProjectName: '',
+	taskURL: 'define-product-service'
+}
 
 export const store = new Vuex.Store({
-	state:{
-		token: localStorage.getItem('access_token') || null,
-		requiredTask: 'This is my current task',
-		currentModule: '1',
-		currentModuleName: 'Product & Service Analysis',
-		currentTask: '1',
-		modules:[],
-		tasks:[],
-		taskName:[],
-		actions:[],
-		userId: localStorage.getItem('loggedin_user') || null,
-		userName: localStorage.getItem('loggedin_username') || null,
-		projects:[],
-		currentProjectId: '',
-		currentProjectName: '',
-		taskURL: 'define-product-service',
-	},
 
+	state,
 
 	mutations: {
 		SET_MODULES: (state, payload) => {
@@ -99,7 +100,6 @@ export const store = new Vuex.Store({
 			return state.taskURL;
 		}
 	},
-
 
 	actions: {
 

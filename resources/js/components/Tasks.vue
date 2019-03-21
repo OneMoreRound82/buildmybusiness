@@ -5,14 +5,16 @@
         <h1>Your current module is {{ moduleName }}</h1>
 
         <li v-for="(task, id) in tasks" :key="id">
+          <router-link  :to="{ name: 'task', params: { url:task.url }}"> {{ task.task }} </router-link>
 
-            	<a href="#" @click="setActionsURL(task.url)" >{{ task.task }}</a></li>
+          	<!-- <a href="#" @click="setActionsURL(task.url)" >{{ task.task }}</a></li> -->
         </li>
 
         <!-- <h2> {{ taskURL }} </h2> -->
 
         <div>
-          <component :is="taskComponent" />
+          <!-- <component :is="taskComponent" /> -->
+          <router-view></router-view>
         </div>
     </div>
 </template>
@@ -45,8 +47,8 @@ export default {
 
         taskComponent() {
 
-          console.log(`./ProductServiceAnalysis/${this.$store.getters['SelectedTaskURL']}.vue`)
-         return () => import(`./ProductServiceAnalysis/${this.$store.getters['SelectedTaskURL']}.vue`)
+         //console.log(`./ProductServiceAnalysis/${this.$store.getters['SelectedTaskURL']}.vue`)
+      //   return () => import(`./ProductServiceAnalysis/${this.$store.getters['SelectedTaskURL']}.vue`)
          }
 
       }),
@@ -54,7 +56,6 @@ export default {
 
 
 },
-
 
 
 
